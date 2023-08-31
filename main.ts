@@ -1,7 +1,7 @@
 import { Plugin } from "obsidian";
 import { GraphLeaf } from "types";
 
-export default class MyPlugin extends Plugin {
+export default class GraphNestedTagsPlugin extends Plugin {
 	// At nodes changes graphLeaf.view.renderer.setData calls, so we need to step in and change links.
 	inject_setData(graphLeaf: GraphLeaf) {
 		const r = graphLeaf.view.renderer;
