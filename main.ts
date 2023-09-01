@@ -17,11 +17,12 @@ export default class GraphNestedTagsPlugin extends Plugin {
 					for (let i = id.length - 1; i > 2; i--) {
 						if (id[i] === "/") {
 							parent = id.slice(0, i);
-							if (parent in nodes) {
-								nodes[id].links[parent] = true;
-								data.numLinks++;
-								break;
+							if (!(parent in nodes)) {
+								nodes[parent] = {"type": "tag", links: []}
 							}
+							nodes[id].links[parent] = true;
+							data.numLinks++;
+							break;
 						}
 					}
 				}
