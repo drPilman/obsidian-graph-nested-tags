@@ -1,7 +1,7 @@
 {
 	"id": "graph-nested-tags",
 	"name": "Nested tags graph",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Links nested tags in graph view",
 	"author": "drpilman",
