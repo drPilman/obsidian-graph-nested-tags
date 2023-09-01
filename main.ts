@@ -12,17 +12,20 @@ export default class GraphNestedTagsPlugin extends Plugin {
 		r.setData = (data: any) => {
 			const nodes = data.nodes;
 			let parent;
+			let last_tag: string;
 			for (const id in nodes) {
 				if (nodes[id].type === "tag") {
+					last_tag = id;
 					for (let i = id.length - 1; i > 2; i--) {
 						if (id[i] === "/") {
 							parent = id.slice(0, i);
 							if (!(parent in nodes)) {
 								nodes[parent] = {"type": "tag", links: []}
+								data.numLinks++;
 							}
-							nodes[id].links[parent] = true;
+							nodes[last_tag].links[parent] = true;
 							data.numLinks++;
-							break;
+							last_tag = parent;
 						}
 					}
 				}
