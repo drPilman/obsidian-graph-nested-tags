@@ -20,7 +20,7 @@ export default class GraphNestedTagsPlugin extends Plugin {
 						if (id[i] === "/") {
 							parent = id.slice(0, i);
 							if (!(parent in nodes)) {
-								nodes[parent] = {"type": "tag", links: []}
+								nodes[parent] = { type: "tag", links: [] };
 								data.numLinks++;
 							}
 							nodes[last_tag].links[parent] = true;
@@ -36,21 +36,25 @@ export default class GraphNestedTagsPlugin extends Plugin {
 	}
 
 	async onload() {
-		// inject each already opened Graph, and reload it.
-		for (const leaf of this.app.workspace.getLeavesOfType("graph")) {
-			this.inject_setData(leaf as GraphLeaf);
-			leaf.view.unload();
-			leaf.view.load();
-		}
-
 		// inject Graphs that will be opened in the future
 		this.registerEvent(
-			this.app.workspace.on("active-leaf-change", (leaf: GraphLeaf) => {
-				if (leaf?.view.getViewType() === "graph") {
-					this.inject_setData(leaf);
+			this.app.workspace.on("layout-change", () => {
+				for (const leaf of this.app.workspace.getLeavesOfType(
+					"graph"
+				)) {
+					if (
+						(leaf as GraphLeaf).view.renderer._setData === undefined
+					) {
+						this.inject_setData(leaf as GraphLeaf);
+					}
 				}
 			})
 		);
+		this.app.workspace.trigger("layout-change");
+		for (const leaf of this.app.workspace.getLeavesOfType("graph")) {
+			leaf.view.unload();
+			leaf.view.load();
+		}
 	}
 
 	onunload() {
