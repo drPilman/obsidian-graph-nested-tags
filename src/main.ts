@@ -1,15 +1,18 @@
 import { Plugin } from "obsidian";
-import { GraphLeaf } from "types";
+import { GraphLeafWithCustomRenderer } from "./interfaces/GraphLeafWithCustomRenderer";
+
 
 export default class GraphNestedTagsPlugin extends Plugin {
-	// At nodes changes graphLeaf.view.renderer.setData calls, so we need to step in and change links.
-	inject_setData(graphLeaf: GraphLeaf) {
-		const r = graphLeaf.view.renderer;
+	// inject our own wrapper around graphLeaf.view.renderer.setData
+	// which will manipulate add tag -> subtag hierarchy  
+	inject_setData(graphLeaf: GraphLeafWithCustomRenderer) {
+		const leafRenderer = graphLeaf.view.renderer;
 
-		if (!r._setData) {
-			r._setData = r.setData;
+		if (leafRenderer.originalSetData == undefined) {
+			leafRenderer.originalSetData = leafRenderer.setData;
 		}
-		r.setData = (data: any) => {
+
+		leafRenderer.setData = (data: any) => {
 			const nodes = data.nodes;
 			let parent;
 			let last_tag: string;
@@ -30,7 +33,7 @@ export default class GraphNestedTagsPlugin extends Plugin {
 					}
 				}
 			}
-			return r._setData?.(data);
+			return leafRenderer.originalSetData?.(data);
 		};
 		return graphLeaf;
 	}
@@ -43,9 +46,9 @@ export default class GraphNestedTagsPlugin extends Plugin {
 					"graph"
 				)) {
 					if (
-						(leaf as GraphLeaf).view.renderer._setData === undefined
+						(leaf as GraphLeafWithCustomRenderer).view.renderer.originalSetData === undefined
 					) {
-						this.inject_setData(leaf as GraphLeaf);
+						this.inject_setData(leaf as GraphLeafWithCustomRenderer);
 					}
 				}
 			})
@@ -58,13 +61,13 @@ export default class GraphNestedTagsPlugin extends Plugin {
 	}
 
 	onunload() {
-		// undone injections and reload the Graphs
+		// undo injections and reload the Graphs
 		for (const leaf of this.app.workspace.getLeavesOfType(
 			"graph"
-		) as GraphLeaf[]) {
-			if (leaf.view.renderer._setData) {
-				leaf.view.renderer.setData = leaf.view.renderer._setData;
-				delete leaf.view.renderer._setData;
+		) as GraphLeafWithCustomRenderer[]) {
+			if (leaf.view.renderer.originalSetData) {
+				leaf.view.renderer.setData = leaf.view.renderer.originalSetData;
+				delete leaf.view.renderer.originalSetData;
 				leaf.view.unload();
 				leaf.view.load();
 			}
