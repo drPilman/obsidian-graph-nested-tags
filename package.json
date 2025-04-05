@@ -1,6 +1,6 @@
 {
 	"name": "graph-nested-tags",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Links nested tags in graph view",
 	"main": "src/main.js",
 	"scripts": {
