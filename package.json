@@ -2,7 +2,7 @@
 	"name": "graph-nested-tags",
 	"version": "1.0.2",
 	"description": "Links nested tags in graph view",
-	"main": "main.js",
+	"main": "src/main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
