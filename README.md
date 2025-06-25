@@ -1,7 +1,5 @@
 # Obsidian Nested tags graph Plugin
 
-> **Note**: this is a fork from [drPilman's addon](https://github.com/drPilman/obsidian-graph-nested-tags) updated to work with new obsidian versions, inspired by code from [folders2graph](https://github.com/ratibus11/folders2graph). 
-
 This is a plugin for [Obsidian](https://obsidian.md).
 
 Links nested tags (Sub_tag->Tag) in graph view:
@@ -21,3 +19,5 @@ Links nested tags (Sub_tag->Tag) in graph view:
 ## Manually installing the plugin
 
 -   Go to releases, copy over `main.js`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/graph-nested-tags/`.
+
+> **Note**: inspired by code from [folders2graph](https://github.com/ratibus11/folders2graph)
