@@ -19,7 +19,7 @@ export default class GraphNestedTagsPlugin extends Plugin {
 			for (const id in nodes) {
 				if (nodes[id].type === "tag") {
 					last_tag = id;
-					for (let i = id.length - 1; i > 2; i--) {
+					for (let i = id.length - 1; i >= 2; i--) {
 						if (id[i] === "/") {
 							parent = id.slice(0, i);
 							if (!(parent in nodes)) {
